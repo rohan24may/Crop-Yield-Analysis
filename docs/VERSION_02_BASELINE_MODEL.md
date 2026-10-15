@@ -270,3 +270,24 @@ These details remain unverified and should be considered when interpreting model
 **Interpretation:** The model achieved an R² of 0.9675 on the chronological test set. However, RMSE is substantially higher than MAE, indicating that some large errors influence the overall evaluation. Earlier crop-level analysis also identified Coconut as a particularly difficult crop to predict.
 
 **Limitations:** The dataset's feature units and availability at prediction time are not fully documented. The evaluation therefore demonstrates performance on historical records, not guaranteed real-world forecasting accuracy. Further error analysis and validation are needed before deployment.
+### 17. Actual vs. Predicted Yield Analysis
+
+**Objective:** Investigate prediction errors on the chronological test set covering 2018–2019.
+
+**Methods used:**
+- Inspected individual actual and predicted yields.
+- Ranked records by absolute prediction error.
+- Calculated crop-level MAE, median absolute error, and maximum absolute error.
+- Examined MAPE and WAPE to compare errors relative to crop yield scales.
+- Plotted actual versus predicted yields for all crops and separately for Coconut.
+
+**Key findings:**
+1. Coconut had the largest crop-level MAE at 1262.0479 across 17 test records, with a maximum absolute error of 3873.1538.
+2. All ten records with the largest absolute errors were Coconut records.
+3. Cashewnut had the highest crop-level WAPE at 153.89%, followed by Castor seed at 145.20%.
+4. MAPE was highly sensitive to small actual yields. One Cashewnut record had an absolute percentage error of 4147.87%.
+5. The actual-versus-predicted plots showed both overprediction and underprediction, particularly for Coconut. Some of the highest Coconut yields were underpredicted.
+
+**Conclusion:** Overall metrics alone do not describe performance across all crops. Crop-specific errors and differences in yield scale must be considered when interpreting the model.
+
+**Next steps:** Investigate possible reasons for crop-specific errors and evaluate improvements without changing the held-out test set repeatedly. No records have been removed and no model changes have been justified by this analysis alone.
