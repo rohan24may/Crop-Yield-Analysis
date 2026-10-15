@@ -290,4 +290,4 @@ These details remain unverified and should be considered when interpreting model
 
 **Conclusion:** Overall metrics alone do not describe performance across all crops. Crop-specific errors and differences in yield scale must be considered when interpreting the model.
 
-**Next steps:** Investigate possible reasons for crop-specific errors and evaluate improvements without changing the held-out test set repeatedly. No records have been removed and no model changes have been justified by this analysis alone.
+**Next steps:** Investigate possible reasons for crop-specific errors and evaluate improvements without changing the held-out test set repeatedly. No records have been removed and no model changes have been justified by this analysis alone.git commit -m "Document crop yield prediction error analysis"
