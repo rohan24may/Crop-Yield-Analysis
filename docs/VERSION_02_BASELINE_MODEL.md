@@ -291,3 +291,44 @@ These details remain unverified and should be considered when interpreting model
 **Conclusion:** Overall metrics alone do not describe performance across all crops. Crop-specific errors and differences in yield scale must be considered when interpreting the model.
 
 **Next steps:** Investigate possible reasons for crop-specific errors and evaluate improvements without changing the held-out test set repeatedly. No records have been removed and no model changes have been justified by this analysis alone.git commit -m "Document crop yield prediction error analysis"
+### 18. Log-Transformed Target Experiment
+
+**Objective:** Test whether transforming the target improves prediction performance across crops with widely varying yield scales.
+
+**Method:**
+- Applied `log1p(Yield)` to the training target.
+- Trained a Random Forest Regressor with 100 trees and random state 42.
+- Converted predictions back to the original scale using `expm1`.
+- Used the same chronological split: training on 1997–2017 and testing on 2018–2019.
+- Evaluated predictions in the original yield units.
+
+**Results:**
+
+| Metric | Baseline | Log-transformed model |
+|---|---:|---:|
+| MAE | 11.2250 | 10.6382 |
+| RMSE | 154.4333 | 150.3480 |
+| R² | 0.9675 | 0.9692 |
+
+**Findings:** The log-transformed model improved all three overall evaluation metrics. MAE decreased by approximately 5.23%, RMSE decreased by approximately 2.64%, and R² increased by 0.0017.
+
+**Decision:** Retain the log-transformed model as the leading candidate, pending crop-level error analysis. Overall improvement does not guarantee better predictions for every crop.
+### 19. Crop-Level Comparison of Baseline and Log-Transformed Models
+
+**Objective:** Determine whether the log-transformed target improves prediction errors consistently across individual crops.
+
+**Method:** Compared crop-level MAE for the baseline Random Forest and the log-transformed Random Forest using the same chronological test set (2018–2019).
+
+**Results:**
+- Total crops evaluated: 55
+- Crops with lower MAE using the log model: 29
+- Crops with higher MAE using the log model: 26
+- Crops with unchanged MAE: 0
+
+**Largest observed improvements:** Coconut, Maize, Banana, Cashewnut, and Castor seed appeared among the leading improvements.
+
+**Largest observed regressions:** Onion, Sugarcane, Dry chillies, Sweet potato, and Tapioca had higher MAE with the log model.
+
+**Conclusion:** The log-transformed model improved overall MAE, RMSE, and R², but its effect varied by crop. It remains the leading candidate based on the current evaluation, not a universally better model for every crop.
+
+**Limitation:** The comparison uses one chronological test period. Further validation would be needed to establish whether these improvements generalize to other years.
