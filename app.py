@@ -89,34 +89,47 @@ historical_tab, prediction_tab = st.tabs(
 # Historical lookup
 # -----------------------------------
 with historical_tab:
-    st.subheader("Look up recorded crop yield")
+    st.subheader("📚 Historical Yield Explorer")
+    st.markdown(
+        "Search recorded agricultural observations by crop, "
+        "year, season, and state."
+    )
+
     st.caption(
         "This section searches the dataset for actual recorded observations. "
         "It does not generate predictions."
     )
 
-    col1, col2 = st.columns(2)
 
-    with col1:
-        historical_crop = st.selectbox(
-            "Crop", crops, key="historical_crop"
-        )
-        historical_year = st.number_input(
-            "Year",
-            min_value=int(df["Crop_Year"].min()),
-            max_value=int(df["Crop_Year"].max()),
-            value=2020,
-            step=1,
-            key="historical_year",
+    with st.expander("🔎 Search Filters", expanded=True):
+        st.caption(
+            "Choose all four filters to find matching records "
+            "in the dataset."
         )
 
-    with col2:
-        historical_season = st.selectbox(
-            "Season", seasons, key="historical_season"
-        )
-        historical_state = st.selectbox(
-            "State", states, key="historical_state"
-        )
+        col1, col2 = st.columns(2)
+
+        with col1:
+            historical_crop = st.selectbox(
+                "Crop", crops, key="historical_crop"
+            )
+            historical_year = st.number_input(
+                "Year",
+                min_value=int(df["Crop_Year"].min()),
+                max_value=int(df["Crop_Year"].max()),
+                value=2020,
+                step=1,
+                key="historical_year",
+            )
+
+        with col2:
+            historical_season = st.selectbox(
+                "Season", seasons, key="historical_season"
+            )
+            historical_state = st.selectbox(
+                "State", states, key="historical_state"
+            )
+
 
     if st.button("Search Historical Data", type="primary"):
         matches = df[
