@@ -13,11 +13,29 @@ st.set_page_config(
     layout="wide",
 )
 
-st.title("🌾 CropYield India")
-st.write(
-    "Explore historical crop yields and estimate crop yield "
-    "using agricultural and climatic factors."
+
+# Sidebar
+with st.sidebar:
+    st.title("🌾 CropYield India")
+    st.caption("Agricultural Intelligence Platform")
+    st.divider()
+
+    st.markdown("### Navigation")
+    st.write("📚 Historical Lookup")
+    st.write("🔮 Yield Prediction")
+
+    st.divider()
+    st.caption("Dataset: Indian crop yield records")
+    st.caption("Coverage: 1997–2020")
+
+# Main dashboard header
+st.title("Crop Yield Analytics")
+st.markdown(
+    "Explore historical agricultural data and generate "
+    "machine-learning-based crop yield estimates."
 )
+st.divider()
+
 
 # Load the dataset
 @st.cache_data
@@ -35,6 +53,28 @@ try:
 except FileNotFoundError:
     st.error("Dataset not found. Check that data/crop_yield.csv exists.")
     st.stop()
+
+
+# Dashboard summary metrics
+metric1, metric2, metric3, metric4 = st.columns(4)
+
+with metric1:
+    st.metric("Total Records", f"{len(df):,}")
+
+with metric2:
+    st.metric("Crop Types", df["Crop"].nunique())
+
+with metric3:
+    st.metric("States & UTs", df["State"].nunique())
+
+with metric4:
+    st.metric(
+        "Years Covered",
+        f"{int(df['Crop_Year'].min())}–{int(df['Crop_Year'].max())}",
+    )
+
+st.divider()
+
 
 # Prepare options from the real dataset
 crops = sorted(df["Crop"].dropna().unique())
