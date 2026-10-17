@@ -332,3 +332,45 @@ These details remain unverified and should be considered when interpreting model
 **Conclusion:** The log-transformed model improved overall MAE, RMSE, and R², but its effect varied by crop. It remains the leading candidate based on the current evaluation, not a universally better model for every crop.
 
 **Limitation:** The comparison uses one chronological test period. Further validation would be needed to establish whether these improvements generalize to other years.
+
+## V2 Model Improvement Experiments
+
+### Objective
+
+The objective of V2 was to evaluate alternative regression models, investigate feature importance, and analyze prediction errors for scenario-based crop yield estimation.
+
+### Model Comparison
+
+All models were evaluated using the same chronological split, with training data through 2017 and evaluation data from 2018–2019. The target was log-transformed during training, and predictions were converted back to the original scale.
+
+| Model | MAE | RMSE | R² |
+|---|---:|---:|---:|
+| Baseline Random Forest | 10.6382 | 150.3480 | 0.9692 |
+| Gradient Boosting | 38.1818 | 475.4258 | 0.6916 |
+| Tuned Random Forest | 11.2942 | 153.5448 | 0.9678 |
+| Simpler Random Forest | 11.5831 | 152.4408 | 0.9683 |
+
+The baseline log-transformed Random Forest outperformed the three alternatives on all three metrics. It remains the leading candidate.
+
+### Feature Importance
+
+Crop accounted for 83.72% of the summed Random Forest feature importance, followed by State at 6.21%, Fertilizer at 3.49%, and Pesticide at 2.65%.
+
+These values describe the model's use of the features in this dataset. They do not establish causal relationships or prove that other agricultural factors are unimportant.
+
+### Crop-Level Error Analysis
+
+Coconut had the largest absolute prediction errors among the crops examined. Cardamom had a WAPE of 104.23% across six evaluation records, while Onion had a WAPE of 55.03% across 54 records.
+
+The actual-versus-predicted plots also showed substantial deviations for some observations. Because crop yields vary considerably in scale, overall metrics should be interpreted alongside crop-level results.
+
+### Limitations
+
+- The 2018–2019 evaluation set was reused for model comparisons and is no longer an untouched final test set.
+- Performance varies across crops, particularly for crops with unusual yield scales or few evaluation records.
+- Feature importance indicates predictive usefulness within the fitted model, not causation.
+- Dataset units and the availability of some scenario inputs should be clarified before interpreting predictions for real-world agricultural decisions.
+
+### V2 Conclusion
+
+The experiments did not identify an alternative that outperformed the baseline model. The log-transformed Random Forest remains the leading candidate for scenario-based crop yield estimation. Further work should focus on reproducible model training, validation on appropriately held-out data, and clear documentation of input assumptions.
