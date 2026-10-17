@@ -3,7 +3,10 @@ import joblib
 import pandas as pd
 from pathlib import Path
 
-from crop_yield_model import predict_yield, FEATURES
+try:
+    from .crop_yield_model import predict_yield, FEATURES
+except ImportError:
+    from crop_yield_model import predict_yield, FEATURES
 
 
 # Locate the saved model in the project folder
