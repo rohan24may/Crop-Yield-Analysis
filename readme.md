@@ -28,15 +28,19 @@ The project uses a Random Forest Regressor with a logarithmic transformation of 
 
 ### Evaluation Results
 
-The model was trained on records from 1997–2017 and evaluated on records from 2018–2019.
+The model was trained on records from 1997–2017 and evaluated chronologically on records from 2018–2019.
 
-| Metric | Baseline Random Forest | Log-Transformed Random Forest |
-|---|---:|---:|
-| MAE | 11.2250 | 10.6382 |
-| RMSE | 154.4333 | 150.3480 |
-| R² | 0.9675 | 0.9692 |
+| Model | MAE | RMSE | R² |
+|---|---:|---:|---:|
+| Random Forest (raw target) | 11.2250 | 154.4333 | 0.9675 |
+| Random Forest (log-transformed target) | 10.6382 | 150.3480 | 0.9692 |
+| Gradient Boosting (log target) | 38.1818 | 475.4258 | 0.6916 |
+| Tuned Random Forest (log target) | 11.2942 | 153.5448 | 0.9678 |
+| Simpler Random Forest (log target) | 11.5831 | 152.4408 | 0.9683 |
 
-The log-transformed model improved all three overall evaluation metrics. However, performance varied by crop, and some crops became less accurate.
+The log-transformed Random Forest remains the leading candidate among the tested models. Crop-level error analysis showed that performance varies considerably by crop, particularly for crops with unusual yield scales.
+
+**Evaluation limitation:** The 2018–2019 evaluation set was reused to compare alternative models. These metrics should therefore not be presented as results from an untouched final test set.
 
 ## Project Structure
 
@@ -46,11 +50,16 @@ Crop-Yield-Analysis/
 ├── docs/
 ├── models/
 ├── notebooks/
+│   ├── 01_data_validation.ipynb
+│   ├── 02_data_preprocessing.ipynb
+│   ├── 03_test_crop_yield_model.ipynb
+│   └── 04_model_improvement.ipynb
 ├── src/
 │   ├── crop_yield_model.py
 │   └── predict.py
 ├── .gitignore
-└── README.md
+├── readme.md
+└── requirements.txt
 ```
 
 The trained model file is stored locally and excluded from GitHub because of its size.
@@ -66,6 +75,37 @@ The trained model file is stored locally and excluded from GitHub because of its
 ```bash
 python src/predict.py
 ```
+
+### Recreating the Saved Model
+
+The trained model file, `models/crop_yield_model.joblib`, is excluded from Git because of its size. A fresh clone must train and save a model before running the prediction script.
+
+The reusable training function is available in `src/crop_yield_model.py`. It can train a model from a supplied DataFrame:
+
+```python
+import joblib
+import pandas as pd
+from pathlib import Path
+from src.crop_yield_model import train_model
+
+df = pd.read_csv("data/crop_yield.csv")
+train_df = df[df["Crop_Year"] <= 2017].copy()
+
+model = train_model(train_df)
+
+Path("models").mkdir(exist_ok=True)
+joblib.dump(model, "models/crop_yield_model.joblib")
+```
+
+This reproduces the training pipeline on records through 2017. To reproduce the documented evaluation results, use the same feature configuration, chronological split, and prediction transformation described in the notebooks.
+
+After saving the model, run the prediction script:
+
+```bash
+python src/predict.py
+```
+
+The example inputs in the script are illustrative, and the predictions should not be treated as validated agricultural advice.
 
 ## Limitations
 
