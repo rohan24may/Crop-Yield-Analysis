@@ -98,6 +98,29 @@ def main():
             f"MAE={group_mae:.4f}, RMSE={group_rmse:.4f}"
         )
 
+        
+    print("\nPERCENTAGE ERROR BY CROP GROUP")
+
+    for group_name, group in [
+        ("Coconut", results[results["Crop"] == "Coconut"]),
+        ("All other crops", results[results["Crop"] != "Coconut"]),
+    ]:
+        valid = group[group["Yield"] > 0].copy()
+
+        if valid.empty:
+            print(f"{group_name}: no positive actual yields")
+            continue
+
+        percentage_errors = (
+            valid["Absolute_Error"] / valid["Yield"]
+        ) * 100
+
+        print(
+            f"{group_name}: records={len(valid)}, "
+            f"MAPE={percentage_errors.mean():.2f}%"
+        )
+
+
 
 if __name__ == "__main__":
     main()
