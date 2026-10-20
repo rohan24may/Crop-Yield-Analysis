@@ -374,3 +374,55 @@ The actual-versus-predicted plots also showed substantial deviations for some ob
 ### V2 Conclusion
 
 The experiments did not identify an alternative that outperformed the baseline model. The log-transformed Random Forest remains the leading candidate for scenario-based crop yield estimation. Further work should focus on reproducible model training, validation on appropriately held-out data, and clear documentation of input assumptions.
+## Final Evaluation on 2020 Data
+
+### 1. Objective
+
+The selected log-target Random Forest model was evaluated on data from 2020 to examine its performance on a later year that was excluded from the training and model-selection split.
+
+### 2. Data Split
+
+- **Training period:** 1997–2017
+- **Model comparison period:** 2018–2019
+- **Final evaluation period:** 2020
+- **Training records:** 17,510
+- **Final evaluation records:** 37
+
+The 2020 records were not included in the model's training data.
+
+### 3. Evaluation Metrics
+
+The model achieved the following results on the 2020 evaluation data:
+
+| Metric | 2020 Result |
+|---|---:|
+| Mean Absolute Error (MAE) | 0.8351 |
+| Root Mean Squared Error (RMSE) | 3.0800 |
+| R² Score | 0.9458 |
+
+These results indicate that the model performed well on this particular evaluation sample. However, the results should be interpreted cautiously because the sample is small.
+
+### 4. Prediction Error Analysis
+
+The evaluation contained 37 records from Uttarakhand, covering 29 distinct crop categories.
+
+Most actual yield values were relatively low, but some crops had substantially higher yields. For example:
+
+- **Sugarcane actual yield:** 81.54
+- **Sugarcane predicted yield:** 63.4407
+- **Absolute prediction error:** 18.0993
+
+This example demonstrates that the model can still make substantial errors for individual records despite achieving a relatively low overall MAE.
+
+### 5. Limitations
+
+1. The evaluation contains only 37 records and represents Uttarakhand rather than all Indian states.
+2. The results may not generalize to other states, crops, or future years.
+3. The 2018–2019 data were used repeatedly for model comparisons, so those results should be treated as exploratory.
+4. Although 2020 was excluded from the training split, its complete independence from every earlier model-selection decision cannot be guaranteed.
+
+### 6. Conclusion
+
+The log-target Random Forest achieved an MAE of 0.8351, an RMSE of 3.0800, and an R² score of 0.9458 on the 2020 evaluation sample. These results are encouraging for the records evaluated, but the small, geographically limited sample prevents broad conclusions about the model's performance across India.
+
+The log-target Random Forest remains the selected candidate model based on the experiments conducted so far. Further evaluation on a larger and more geographically representative dataset would be needed to establish its broader reliability.
