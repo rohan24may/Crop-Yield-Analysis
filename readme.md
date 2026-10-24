@@ -1,10 +1,10 @@
-# Analysis and Prediction of Crop Yield in India
+# Crop Yield Analysis and Prediction in India
 
-A machine learning project that analyzes historical agricultural and climatic data to predict crop yield across Indian states.
+A machine learning project that analyzes historical agricultural and climatic data to predict crop yield across Indian states. The project includes data quality analysis, preprocessing, model comparison, prediction error investigation, and an interactive Streamlit dashboard.
 
 ## Project Objective
 
-Explore historical crop yield patterns and build a regression model using crop type, season, state, year, rainfall, fertilizer, and pesticide features.
+Explore historical crop yield patterns and build a regression model using crop type, season, state, year, annual rainfall, fertilizer, and pesticide features.
 
 ## Dataset
 
@@ -13,34 +13,62 @@ Explore historical crop yield patterns and build a regression model using crop t
 - **Size:** 19,689 records
 - **Target variable:** `Yield`
 
+The dataset is examined for missing values, duplicates, inconsistent categorical whitespace, unusual values, and potential data-quality issues. Flagged records are investigated rather than automatically removed.
+
 ## Tech Stack
 
-- Python
-- Pandas and NumPy
-- Matplotlib and Seaborn
-- Scikit-learn
-- Jupyter Notebook
-- Git and GitHub
+- **Language:** Python
+- **Data analysis:** Pandas, NumPy
+- **Visualization:** Matplotlib, Seaborn
+- **Machine learning:** Scikit-learn
+- **Dashboard:** Streamlit
+- **Development:** Jupyter Notebook, VS Code
+- **Version control:** Git and GitHub
 
-## Machine Learning
+## Machine Learning Approach
 
-The project uses a Random Forest Regressor with a logarithmic transformation of the target variable.
+The main model is a **Random Forest Regressor** trained using a logarithmic transformation of the target variable (`log1p`). Predictions are transformed back to the original target scale using `expm1`.
 
-### Evaluation Results
+### Input Features
 
-The model was trained on records from 1997–2017 and evaluated chronologically on records from 2018–2019.
+- Crop
+- Crop year
+- Season
+- State
+- Annual rainfall
+- Fertilizer
+- Pesticide
+
+`Area` and `Production` are excluded from the main model's input features.
+
+### Model Evaluation Results
+
+The data was split chronologically, with records through 2017 used for training and 2018–2019 used for testing.
 
 | Model | MAE | RMSE | R² |
 |---|---:|---:|---:|
-| Random Forest (raw target) | 11.2250 | 154.4333 | 0.9675 |
-| Random Forest (log-transformed target) | 10.6382 | 150.3480 | 0.9692 |
-| Gradient Boosting (log target) | 38.1818 | 475.4258 | 0.6916 |
-| Tuned Random Forest (log target) | 11.2942 | 153.5448 | 0.9678 |
-| Simpler Random Forest (log target) | 11.5831 | 152.4408 | 0.9683 |
+| **Random Forest — 100 trees, log target** | **10.6382** | **150.3480** | **0.9692** |
+| Random Forest — 300 trees, log target | 10.7988 | 151.1103 | 0.9688 |
+| Crop-only Random Forest | 34.4526 | 454.2240 | 0.7185 |
+| Gradient Boosting, log target | 38.1818 | 475.4258 | 0.6916 |
+| Tuned Random Forest, log target | 11.2942 | 153.5448 | 0.9678 |
+| Simpler Random Forest, log target | 11.5831 | 152.4408 | 0.9683 |
+| Random Forest, raw target | 11.2250 | 154.4333 | 0.9675 |
 
-The log-transformed Random Forest remains the leading candidate among the tested models. Crop-level error analysis showed that performance varies considerably by crop, particularly for crops with unusual yield scales.
+The 100-tree Random Forest was the strongest candidate among the tested configurations according to MAE, RMSE, and R².
 
-**Evaluation limitation:** The 2018–2019 evaluation set was reused to compare alternative models. These metrics should therefore not be presented as results from an untouched final test set.
+### Additional Analysis
+
+- **Feature importance:** Crop accounts for approximately 83.72% of the model's impurity-based feature importance. This describes how the fitted model uses the features; it does not establish causation.
+- **Coconut error analysis:** Coconut's unusually large yield values substantially affect overall error metrics.
+- **Baseline comparison:** On 17 Coconut test records, the Random Forest achieved an MAE of 1,208.158, compared with 1,551.179 for a historical-mean baseline.
+- **Data-quality investigation:** Potentially inconsistent zero values and crop-wise IQR outliers were flagged and documented rather than automatically deleted.
+
+### Evaluation Limitations
+
+The 2018–2019 test set was reused during model comparisons. Therefore, these results are exploratory and should not be presented as an untouched final evaluation.
+
+The 2020 records are limited in coverage and should not be treated as a representative test set for all crops and states. An independent evaluation on additional future-year data remains a useful next step.
 
 ## Project Structure
 
@@ -48,6 +76,8 @@ The log-transformed Random Forest remains the leading candidate among the tested
 Crop-Yield-Analysis/
 ├── data/
 ├── docs/
+│   ├── model_evaluation/
+│   └── preprocessing/
 ├── models/
 ├── notebooks/
 │   ├── 01_data_validation.ipynb
@@ -56,67 +86,92 @@ Crop-Yield-Analysis/
 │   └── 04_model_improvement.ipynb
 ├── src/
 │   ├── crop_yield_model.py
-│   └── predict.py
+│   ├── predict.py
+│   └── train.py
+├── app.py
 ├── .gitignore
-├── readme.md
+├── README.md
 └── requirements.txt
 ```
 
-The trained model file is stored locally and excluded from GitHub because of its size.
+The trained model file is stored locally and excluded from Git because of its size. The dataset may also need to be obtained separately, depending on repository configuration.
 
-## Running the Project
+## Setup and Installation
 
-1. Clone the repository and activate your Python environment.
-2. Install the required dependencies.
-3. Obtain the dataset and place `crop_yield.csv` inside `data/`.
-4. Run the notebooks in the `notebooks/` folder to explore and evaluate the project.
-5. To make a prediction, ensure the locally saved model exists at `models/crop_yield_model.joblib`, then run:
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/rohan24may/Crop-Yield-Analysis.git
+cd Crop-Yield-Analysis
+```
+
+### 2. Create and activate a virtual environment
+
+Windows PowerShell:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+### 3. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Add the dataset
+
+Obtain the dataset from [Mendeley Data](https://data.mendeley.com/datasets/ncw2vbcgnk/2) and place `crop_yield.csv` in the `data/` directory.
+
+### 5. Train and save the model
+
+```bash
+python src/train.py
+```
+
+The trained model is saved to:
+
+```text
+models/crop_yield_model.joblib
+```
+
+### 6. Launch the dashboard
+
+```bash
+streamlit run app.py
+```
+
+Open the local URL printed in the terminal, usually `http://localhost:8501`.
+
+### 7. Run the prediction script
+
+After training the model:
 
 ```bash
 python src/predict.py
 ```
 
-### Recreating the Saved Model
-
-The trained model file, `models/crop_yield_model.joblib`, is excluded from Git because of its size. A fresh clone must train and save a model before running the prediction script.
-
-The reusable training function is available in `src/crop_yield_model.py`. It can train a model from a supplied DataFrame:
-
-```python
-import joblib
-import pandas as pd
-from pathlib import Path
-from src.crop_yield_model import train_model
-
-df = pd.read_csv("data/crop_yield.csv")
-train_df = df[df["Crop_Year"] <= 2017].copy()
-
-model = train_model(train_df)
-
-Path("models").mkdir(exist_ok=True)
-joblib.dump(model, "models/crop_yield_model.joblib")
-```
-
-This reproduces the training pipeline on records through 2017. To reproduce the documented evaluation results, use the same feature configuration, chronological split, and prediction transformation described in the notebooks.
-
-After saving the model, run the prediction script:
-
-```bash
-python src/predict.py
-```
-
-The example inputs in the script are illustrative, and the predictions should not be treated as validated agricultural advice.
+The prediction script uses its configured example inputs. Predictions are estimates based on the dataset and model, not validated agricultural advice.
 
 ## Limitations
 
-- The dataset's measurement units and feature availability at prediction time are not fully documented.
-- Model accuracy varies across crops.
-- The evaluation covers one chronological test period, 2018–2019.
-- Predictions should not be treated as validated agricultural advice.
+- The dataset's target measurement units and some feature definitions require further verification.
+- Prediction errors vary considerably by crop, especially for crops with unusually large yield scales.
+- Feature importance does not establish causal relationships.
+- The evaluation covers a limited chronological test period, and the test set was reused during model comparisons.
+- Some flagged data-quality issues have not been independently verified against the original source.
+- Model inputs may not all be available in advance when making genuine future-yield forecasts.
 
 ## Future Improvements
 
-- Investigate crop-specific prediction errors.
-- Validate the model on additional future-year data.
-- Improve documentation of data units and feature definitions.
-- Explore alternative regression models and evaluation strategies.
+- Conduct independent validation on additional future-year data.
+- Investigate crop-specific errors and unusual target values.
+- Verify the target's units and definition against the dataset documentation.
+- Evaluate feature availability at the time a prediction would be made.
+- Explore additional regression models and robust evaluation strategies.
+- Improve model monitoring and dashboard documentation.
+
+## Author
+
+**Rohan** — MCA student working on data science and machine learning projects.
