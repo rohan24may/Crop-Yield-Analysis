@@ -1,0 +1,10 @@
+Check,Result,Action
+Original records,19689,Baseline recorded
+Cleaned records,19689,All records retained
+Missing values,0,No imputation required
+Exact duplicate rows,0,None removed
+Zero-production records,112,Flagged for review
+Zero-yield records,112,Flagged for review
+Crop-wise IQR outliers,749,Flagged; no automatic removal
+IQR outliers with >10% ratio discrepancy,187,Flagged for investigation
+IQR outliers with >25% ratio discrepancy,87,Flagged for investigation
