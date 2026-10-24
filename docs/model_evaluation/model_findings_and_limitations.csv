@@ -1,0 +1,7 @@
+Area,Finding,Limitation
+Best Model,Random Forest with 100 trees,Selected from experiments using the same test set
+Overall Performance,MAE=10.6382; RMSE=150.3480; R2=0.9692,Errors are strongly affected by very high-yield records
+Feature Importance,Crop contributes 83.72% of impurity-based importance,Importance is not evidence of causation
+Coconut Analysis,Random Forest beats the historical-mean baseline on 17 records,Small crop-specific test sample
+Data Quality,Whitespace standardized; suspicious records flagged,Flagged values have not all been independently verified
+Final Validation,Chronological test years were 2018 and 2019,Test set reused during model comparisons

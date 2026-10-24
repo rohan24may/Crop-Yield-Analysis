@@ -1,0 +1,8 @@
+Issue,Finding,Decision
+Whitespace in categorical columns,172 Crop values and 19689 Season values standardized,Applied whitespace trimming
+Missing values,0 missing values,No imputation required
+Duplicate records,0 exact duplicate rows,No duplicate removal required
+Zero-value inconsistencies,8 records where Production and Yield disagree on zero,Flagged; retained pending verification
+Crop-wise IQR outliers,749 records flagged,Retained; no automatic outlier removal
+Yield ratio discrepancies,87 high and 100 moderate discrepancies among IQR outliers,Saved for source verification
+Numerical data,All numerical values unchanged,Preserved original values

@@ -1,9 +1,9 @@
-Crop,Crop_Year,Season,State,Area,Production,Annual_Rainfall,Fertilizer,Pesticide,Yield
-Cardamom,1997,Whole Year,West Bengal,2674.0,7,1852.9,254484.58,828.94,0.0
-Sunflower,1997,Whole Year,West Bengal,278.0,1,1852.9,26457.26,86.18,0.0
-Cotton(lint),2017,Kharif,Tamil Nadu,138290.0,337,970.9,21772377.6,52550.2,0.0
-Cotton(lint),2017,Rabi,Tamil Nadu,43341.0,101,970.9,6823607.04,16469.58,0.0
-Tobacco,2012,Kharif,Jammu and Kashmir,1.0,0,1116.7,150.8,0.31,0.4
-Tobacco,2014,Kharif,Jammu and Kashmir,1.0,0,1278.4,150.96,0.33,0.4
-Horse-gram,2016,Rabi,Jammu and Kashmir,1.0,0,902.8,153.25,0.35,0.4
-Masoor,2004,Kharif,Mizoram,0.5,0,2640.8,54.17,0.105,0.4
+Crop,Crop_Year,Season,State,Area,Production,Annual_Rainfall,Fertilizer,Pesticide,Yield,Issue
+Cardamom,1997,Whole Year,West Bengal,2674.0,7,1852.9,254484.58,828.94,0.0,Positive production but zero yield
+Sunflower,1997,Whole Year,West Bengal,278.0,1,1852.9,26457.26,86.18,0.0,Positive production but zero yield
+Cotton(lint),2017,Kharif,Tamil Nadu,138290.0,337,970.9,21772377.6,52550.2,0.0,Positive production but zero yield
+Cotton(lint),2017,Rabi,Tamil Nadu,43341.0,101,970.9,6823607.04,16469.58,0.0,Positive production but zero yield
+Tobacco,2012,Kharif,Jammu and Kashmir,1.0,0,1116.7,150.8,0.31,0.4,Zero production but positive yield
+Tobacco,2014,Kharif,Jammu and Kashmir,1.0,0,1278.4,150.96,0.33,0.4,Zero production but positive yield
+Horse-gram,2016,Rabi,Jammu and Kashmir,1.0,0,902.8,153.25,0.35,0.4,Zero production but positive yield
+Masoor,2004,Kharif,Mizoram,0.5,0,2640.8,54.17,0.105,0.4,Zero production but positive yield
