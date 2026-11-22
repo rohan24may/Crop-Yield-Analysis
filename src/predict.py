@@ -4,6 +4,7 @@ from pathlib import Path
 import joblib
 import pandas as pd
 import streamlit as st
+import math
 
 try:
     from .crop_yield_model import predict_yield, FEATURES
@@ -44,11 +45,17 @@ def predict_crop_yield(
         "Pesticide": pesticide,
     }
 
+
     for name, value in numeric_values.items():
-        if value is None or not pd.notna(value):
+        try:
+            number = float(value)
+        except (TypeError, ValueError):
             raise ValueError(f"{name} must be a valid number.")
 
-        if float(value) < 0:
+        if not math.isfinite(number):
+            raise ValueError(f"{name} must be finite.")
+
+        if number < 0:
             raise ValueError(f"{name} cannot be negative.")
 
     categorical_values = [crop, season, state]
